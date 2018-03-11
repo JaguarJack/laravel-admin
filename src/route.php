@@ -7,7 +7,7 @@ Route::namespace('Lizyu\\Admin\\Controllers')->middleware('web', 'checkPemrissio
     Route::get('logout', 'LoginController@logout')->name('logout');
     Route::post('login', 'LoginController@login')->name('login');
     Route::resource('user', 'UsersController');
-    Route::resource('role', 'rolesController');
+    Route::resource('role', 'RolesController');
     Route::resource('permission', 'PermissionsController');
     Route::post('getUsers', 'UsersController@getUsers');
     Route::post('giveRoleToUser', 'UsersController@giveRoleToUser');
