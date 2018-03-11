@@ -1,0 +1,20 @@
+{
+	"name" : "lizyu/admin",
+	"authors" : [{
+			"name" : "yanwenwu",
+			"email" : "wuyanwen1992@gmail.com"
+		}
+	],
+	"autoload" : {
+		"psr-4" : {
+			"Lizyu\\Admin\\" : ""
+		}
+	},
+	"description" : "Admin manage of laravel",
+	"homepage" : "https://www.njphper.com",
+	"license" : "MIT",
+	"keywords" : [
+		"laravel",
+		"admin"
+	]
+}
