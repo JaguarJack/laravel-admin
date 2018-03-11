@@ -12,6 +12,7 @@ composer require "lizyu/admin"
 4.直接访问后台
 
 ## 注意点
+需要删除Laravel自带的User table 启用新的user结构
 后台使用的H+UI， 所以你需要继续开发，就需要去下载一套， 网上资源很多
 本后台没有进行任何封装， 只是单纯的CURD页面，无需增加学习成本， 你只需要在在app开发目录进行开发就可以了
 
