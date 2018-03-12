@@ -37,11 +37,11 @@ class User extends Authenticatable
      * @param unknown $offset
      * @return Collection
      */
-    public function getUsers($offset):Collection
+    public function getUsers($offset, $limit = 2):Collection
     {
         return $this->select('id', 'name', 'email', 'is_super', 'created_at')
                     ->offset($offset)
-                    ->limit(10)
+                    ->limit($limit)
                     ->get();
     }
     

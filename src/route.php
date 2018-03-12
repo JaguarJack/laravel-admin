@@ -1,28 +1,30 @@
 <?php
 
-Route::namespace('Lizyu\\Admin\\Controllers')->middleware('web', 'checkPemrission')->group(function(){
-    Route::get('indexs', 'IndexController@index');
+Route::namespace('Lizyu\\Admin\\Controllers')->middleware('web')->group(function(){
+    /* IndexController */
+    Route::get('index', 'IndexController@index');
     Route::get('index/main', 'IndexController@main');
+    
+    /* LoginController */
     Route::get('login', 'LoginController@showLoginForm');
     Route::get('logout', 'LoginController@logout')->name('logout');
     Route::post('login', 'LoginController@login')->name('login');
-    Route::resource('user', 'UsersController');
-    Route::resource('role', 'RolesController');
-    Route::resource('permission', 'PermissionsController');
+    
+    /* UserController */
+    Route::resource('user', 'UsersController')->middleware('checkPemrission');
     Route::post('getUsers', 'UsersController@getUsers');
-    Route::post('giveRoleToUser', 'UsersController@giveRoleToUser');
-    Route::post('delUsers', 'UsersController@delUsers');
-    Route::post('user/changeStatus', 'UsersController@changeStatus');
-    Route::get('getRoles', 'RolesController@getRoles');
-    Route::post('getLimitRoles', 'RolesController@getLimitRoles');
-    Route::post('givePermissionsToRole', 'RolesController@givePermissionsToRole');
-    
     Route::post('getRolesOfUser', 'UsersController@getRolesOfUser');
+    Route::post('giveRoleToUser', 'UsersController@giveRoleToUser')->middleware('checkPemrission');
+    Route::post('user/changeStatus', 'UsersController@changeStatus')->middleware('checkPemrission');
     
+    /* RolesController */
+    Route::resource('role', 'RolesController')->middleware('checkPemrission');
+    Route::post('getLimitRoles', 'RolesController@getLimitRoles');
+    Route::post('givePermissionsToRole', 'RolesController@givePermissionsToRole')->middleware('checkPemrission');
+    
+    /* PermissionsController */
+    Route::resource('permission', 'PermissionsController')->middleware('checkPemrission');
     Route::get('getPermissions', 'PermissionsController@getPermissions');
-    Route::get('permission', 'PermissionsController@index');
     Route::get('create/{id?}', 'PermissionsController@create')->where(['id' => '[0-9]+']);
-    Route::post('permission/store', 'PermissionsController@store');
-    Route::post('getPermissions', 'PermissionsController@getPermissions');
-    Route::post('update', 'PermissionsController@update');
 });
+    

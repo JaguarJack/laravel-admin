@@ -84,19 +84,12 @@ $("#editRole").validate({
       },
     },
     submitHandler:function(form){
-        var params = { name:$('input[name=name]').val(),description:$('input[name=description]').val(),
-                _token:"{{ csrf_token() }}",_method:'PUT'}
-        $.post("{{ url('role', [$role->id]) }}", params, function(data){
-            if (data.status == 10001) {
-            	 formError($('input[name=username]'));
-            } else {
-            	 swal({
-                     title: data.msg,
-                     type: "info",
-                     confirmButtonColor: "#DD6B55",
-                 });
-            }
-        })
+        var params = {}
+        params['name'] = $('input[name=name]').val()
+        params['description'] = $('input[name=description]').val()
+        params['_token'] = "{{ csrf_token() }}"
+        params['_method'] = "PUT"
+        formSubmit("{{ url('role', [$role->id]) }}", params);
     }  
 }); 
 </script>
@@ -134,15 +127,11 @@ $("#editRole").validate({
     }
    
 	 $(".submitPer").click(function(){
-		$.post("{{ url('givePermissionsToRole') }}", {role_id:"{{ $role->id }}", _token:"{{ csrf_token() }}", permission:ids}, function(data){
-			if (data.status == 10000) {
-	        	 swal({
-	                 title: data.msg,
-	                 type: "info",
-	                 confirmButtonColor: "#DD6B55",
-	             });
-	         } 
-		})
+		var params = {}
+        params['role_id'] = "{{ $role->id }}"
+        params['_token'] = "{{ csrf_token() }}"
+        params['permission'] = ids
+        formSubmit("{{ url('givePermissionsToRole') }}", params);
 	})
 </SCRIPT>
 @endsection

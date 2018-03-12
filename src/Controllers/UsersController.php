@@ -146,7 +146,7 @@ class UsersController extends BaseController
     public function getUsers(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $users = $this->user->getUsers($request->input('offset'));
+            $users = $this->user->getUsers($request->input('offset'), $request->input('limit'));
             
             return response()->json([
                 'total' => $this->user->count(),

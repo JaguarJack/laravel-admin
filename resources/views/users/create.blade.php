@@ -69,17 +69,12 @@ $("#addUserInfo").validate({
       },
     },
     submitHandler:function(form){
-        var params = { name:$('input[name=username]').val(),email:$('input[name=email]').val(),
-        			   password:$('input[name=password]').val(),_token:"{{ csrf_token() }}",
-                	  }
-        $.post("{{ url('user') }}", params, function(data){
-            if (data.status == 10001) {
-            	 $('input[name=username]').parent('div').addClass('has-error');
-            } else {
-            	add(data.data.id, data.data.name, data.data.email, '', data.data.created_at);
-            	close();
-            }
-        })
+        var params = {}
+    	params['name'] = $('input[name=username]').val()
+    	params['email'] = $('input[name=email]').val()
+    	params['password'] = $('input[name=password]').val()
+    	params['_token'] = "{{ csrf_token() }}"
+        formSubmit("{{ url('user') }}", params);
     }  
 });  
 </script>

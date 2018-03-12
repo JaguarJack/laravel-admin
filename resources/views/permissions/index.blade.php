@@ -61,9 +61,5 @@
         </div>
     @endsection
 @section('script')
-<script>
-function getid(id) {
-	_delete('/permission/' + id, id)
-}
 </script>
 @endsection

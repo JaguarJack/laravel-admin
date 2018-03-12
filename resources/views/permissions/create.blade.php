@@ -78,17 +78,15 @@ $("#addMenu").validate({
       },
     },
     submitHandler:function(form){
-        var params = { icon:$('input[name=icon]').val(),name:$('input[name=name]').val(),url:$('input[name=url]').val(),
-        			   behavior:$('input[name=behavior]').val(),weight:$('input[name=weight]').val(),
-        				_token:"{{ csrf_token() }}", pid:$('input[name=id]').val()
-                	  }
-        $.post("{{ url('permission') }}", params, function(data){
-            	 swal({
-                     title: data.msg,
-                     type: (data.status == 10001 ? 'warning' : 'info') ,
-                     confirmButtonColor: "#DD6B55",
-               });
-        });
+        var params = {}
+    	params['icon'] = $('input[name=icon]').val()
+    	params['name'] = $('input[name=name]').val()
+    	params['url'] = $('input[name=url]').val()
+    	params['behavior'] = $('input[name=behavior]').val()
+    	params['weight'] = $('input[name=weight]').val()
+    	params['pid'] = $('input[name=id]').val()
+    	params['_token'] = "{{ csrf_token() }}"
+        formSubmit("{{ url('permission') }}", params);
     }  
 });  
 </script>

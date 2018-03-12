@@ -47,7 +47,7 @@
                                         <label class="col-sm-3 control-label">是否为超级用户：</label>
                                         <div class="col-sm-8">
                                            <div class="onoffswitch">
-                                           <input type="checkbox" name="is_super" class="onoffswitch-checkbox" id="status" {{$user->is_super == 1 ? 'checked' : ''}} value="{{$user->status}}">
+                                           <input type="checkbox" name="is_super" class="onoffswitch-checkbox" id="status" {{$user->is_super == 1 ? 'checked' : ''}} value="{{$user->is_super}}">
                                            <label class="onoffswitch-label" for="status">
                                            <span class="onoffswitch-inner"></span>
                                            <span class="onoffswitch-switch"></span></label></div></div>
@@ -117,13 +117,11 @@ $('.authuser').click(function () {
     var ids = $.map($('#userrole').bootstrapTable('getSelections'), function (row) {
         return row.id;
     });
-    $.post("{{url('giveRoleToUser')}}", {user_id:"{{$user->id}}",role:ids, _token:'{{ csrf_token() }}'}, function(data){
-        	 swal({
-                 title: data.msg,
-                 type: (data.status == 10000 ? 'info' : "warning"),
-                 confirmButtonColor: "#DD6B55",
-             });
-    })
+    var params = {}
+	params['role'] = ids
+	params['user_id'] = "{{$user->id}}"
+	params['_token'] = '{{ csrf_token() }}'
+    formSubmit("{{url('giveRoleToUser')}}", params);
 });
 $("#editUserInfo").validate({
 	rules: {
@@ -148,26 +146,17 @@ $("#editUserInfo").validate({
         },
     },
     submitHandler:function(form){
-        var params = { name:$('input[name=username]').val(),email:$('input[name=email]').val(),
-        			   password:$('input[name=password]').val(),is_super:$('.onoffswitch-checkbox').val(),
-        			   _token:"{{ csrf_token() }}", _method:'PUT'
-                	  }
-        $.post("{{ url('user', [ $user->id ]) }}", params, function(data){
-            if (data.status == 10001) {
-            	formError($('input[name=username]'), data.msg)
-            } else {
-            	swal({
-                    title: data.msg,
-                    type: 'info',
-                    confirmButtonColor: "#DD6B55",
-                });
-            }
-
-           
-        })
+        var params = {}
+    	params['name'] = $('input[name=username]').val()
+    	params['email'] = $('input[name=email]').val()
+    	params['password'] = $('input[name=password]').val()
+    	params['is_super'] = $('input[name=is_super]').val()
+    	params['_token'] = "{{ csrf_token() }}"
+    	params['_method'] = 'PUT'
+        formSubmit("{{ url('user', [ $user->id ]) }}", params);
     }  
 });
-$('#addUserInfo').on('change', '.onoffswitch-checkbox', function(){
+$('#editUserInfo').on('change', '.onoffswitch-checkbox', function(){
 	$(this).val($(this).val() == 1 ? 2 : 1);
 })
 </script>

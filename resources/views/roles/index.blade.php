@@ -43,7 +43,7 @@ $('#table').bootstrapTable({
         },
         sidePagination: "server",         
         pageNumber:1,                   
-        pageSize: 10,                     
+        pageSize: pageSize,                     
         search: false,                   
         strictSearch: true,
         showColumns: true,               
@@ -76,13 +76,23 @@ $('#table').bootstrapTable({
                        '<button type="button" class="btn btn-danger" onclick="getid('+row.id+')"><i class="fa fa-trash-o"></i> 删除</button>'
             }
         },],
+        responseHandler:function(data){
+            if (data.msg) {
+            	swal({
+                    title: data.msg,
+                    type: "info",
+                    confirmButtonColor: "#DD6B55",
+               });
+            } else {return data;}
+        },
     });
 function getPermissions(id)
 {
 	window.location.href = "/role/" +id+ "/edit";
 }
+
 function getid(id) {
-	_delete('/role/' + id, id)
+	_delete('/role/' + id)
 }
 </script>
 @endsection

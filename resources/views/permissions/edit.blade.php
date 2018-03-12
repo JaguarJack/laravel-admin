@@ -80,25 +80,16 @@ $("#editMenu").validate({
       },
     },
     submitHandler:function(form){
-        var params = { icon:$('input[name=icon]').val(),name:$('input[name=name]').val(),url:$('input[name=url]').val(),
-        			   behavior:$('input[name=behavior]').val(),weight:$('input[name=weight]').val(),
-        				_token:"{{ csrf_token() }}", id:"{{$permission->id}}",_method:"PUT",
-                	  }
-        $.post("{{ url('permission', [$permission->id]) }}", params, function(data){
-            if (data.status == 10001) {
-            	 swal({
-                     title: data.msg,
-                     type: "info",
-                     confirmButtonColor: "#DD6B55",
-               });
-            } else {
-            	 swal({
-                     title: data.msg,
-                     type: "info",
-                     confirmButtonColor: "#DD6B55",
-               });
-            }
-        })
+        var params = {}
+    	params['icon'] = $('input[name=icon]').val()
+    	params['name'] = $('input[name=name]').val()
+    	params['url'] = $('input[name=url]').val()
+    	params['behavior'] = $('input[name=behavior]').val()
+    	params['weight'] = $('input[name=weight]').val()
+    	params['pid'] = $('input[name=id]').val()
+    	params['_token'] = "{{ csrf_token() }}"
+    	params['_method'] = "PUT"
+        formSubmit("{{ url('permission', [$permission->id]) }}", params, 2);
     }  
 });  
 </script>

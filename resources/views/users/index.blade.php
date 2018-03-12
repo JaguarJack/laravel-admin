@@ -39,7 +39,7 @@ $('#table').bootstrapTable({
     }},
     sidePagination: "server",        
     pageNumber:1,                  
-    pageSize: 10,                  
+    pageSize: pageSize,                  
     search: false,                    
     strictSearch: true,
     showColumns: true,             
@@ -62,8 +62,8 @@ $('#table').bootstrapTable({
         title: "是否为超级用户",
         formatter: function(value, row, index) {
             return '<div class="onoffswitch">' +
-                   '<input type="checkbox" uid="'+row.id+'" data="'+value+'" class="onoffswitch-checkbox" id="status'+value+'"'+(value == 1 ? ' checked' : '')+'>' +
-                   '<label class="onoffswitch-label" for="status'+value+'">' +
+                   '<input type="checkbox" uid="'+row.id+'" data="'+value+'" class="onoffswitch-checkbox" id="status'+row.id+'"'+(value == 1 ? ' checked' : '')+'>' +
+                   '<label class="onoffswitch-label" for="status'+row.id+'">' +
                    '<span class="onoffswitch-inner"></span>'+
                    '<span class="onoffswitch-switch"></span></label></div></div>';
             },
@@ -77,6 +77,15 @@ $('#table').bootstrapTable({
 					'<button class="btn btn-danger" onclick="getid('+row.id+')" type="button"><i class="fa fa-trash-o"></i> 删除</button>'
         },
     }],
+    responseHandler:function(data){
+        if (data.msg) {
+        	swal({
+                title: data.msg,
+                type: "info",
+                confirmButtonColor: "#DD6B55",
+           });
+        } else {return data;}
+    },
 });
 
 $('#table').on('change', '.onoffswitch-checkbox', function(){
@@ -96,8 +105,7 @@ $('#table').on('change', '.onoffswitch-checkbox', function(){
 	})
 })
 function getid(id) {
-	alert(id)
-	_delete('/user/' + id, id)
+	_delete('/user/' + id)
 }
 </script>
 @endsection

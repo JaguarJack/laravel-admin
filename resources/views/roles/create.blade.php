@@ -46,19 +46,11 @@ $("#addRole").validate({
        },
 	},
     submitHandler:function(form){
-        var params = { name:$('input[name=username]').val(), description:$('input[name=description]').val(),_token:"{{ csrf_token() }}",}
-        $.post("{{ url('role') }}", params, function(data){
-            if (data.status == 10001) {
-            	 formError($('input[name=name]'), data.msg)
-            } else {
-            	swal({
-                    title: data.msg,
-                    type: "info",
-                    confirmButtonColor: "#DD6B55",
-              });
-            }
-
-        })
+      var params = {}
+      params['name'] = $('input[name=username]').val()
+      params['description'] = $('input[name=description]').val()
+      params['_token'] = "{{ csrf_token() }}"
+      formSubmit("{{ url('role') }}", params);
     }  
 });  
 </script>

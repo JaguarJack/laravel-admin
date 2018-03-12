@@ -31,17 +31,17 @@
 </body>
 </html>
 <script>
+//表单每页显示的数量
+var pageSize = 10;
+
 function formError(dom, msg) {
 	dom.parent('div').parent('.form-group').removeClass('has-success').addClass('has-error');
 	dom.next('span').html('<i class="fa fa-times-circle">'+msg+'</i>')
 }
-function _delete(url, id) {
-    $.post(url, {id:id,_method:"DELETE", _token:'{{ csrf_token() }}'}, function(data){
+function _delete(url) {
+    $.post(url, {_method:"DELETE", _token:'{{ csrf_token() }}'}, function(data){
         if (data.status == 10000) {
-        	$('#table').bootstrapTable('remove', {
-                field: 'id',
-                values: id
-            });
+        	window.location.reload();
          } else {
         	 swal({
                  title: data.msg,
@@ -49,6 +49,20 @@ function _delete(url, id) {
                  confirmButtonColor: "#DD6B55",
              });
           }
+    })
+}
+function formSubmit(url, params, type = 1) {
+	$.post(url, params, function(data){
+        if (data.status == 10001 && type == 1 ) {
+            alert(213)
+          	formError($('input[name=username]'), data.msg);
+          	return false;
+        }
+        swal({
+            title: data.msg,
+            type: (data.status == 10000 ? 'info' : "warning"),
+            confirmButtonColor: "#DD6B55",
+        });
     })
 }
 </script>

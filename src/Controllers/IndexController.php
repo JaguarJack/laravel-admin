@@ -14,8 +14,8 @@ class IndexController extends BaseController
     
     public function index(User $user)
     { 
-       //超级用户
-       $permissions = $user->is_super == 1 ? $this->permissions()->getAll() : $user->getUserOfPermissions(Auth::id());
+       $loginUser = Auth::user();
+       $permissions = $loginUser->is_super == 1 ? $this->permission()->getAll() : $user->getUserOfPermissions($loginUser->id);
        $userHavePerimssions = (new MenuService($permissions))->treeMenu();
        
        return view('lizadmin::index.index', [

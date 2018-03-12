@@ -115,10 +115,10 @@ class PermissionsController extends BaseController
      * @date:2018年1月21日
      * @param Request $request
      */
-    public function update(Request $request)
+    public function update($id, Request $request)
     {
         $permission = $request->except(['_token', '_method']);
-
+        $permission['id'] = $id;
         return $this->permissions->update($permission) ? $this->ajaxSuccess('更新成功') : $this->ajaxFail('更新失败');
     }
     

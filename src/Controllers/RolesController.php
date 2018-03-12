@@ -58,7 +58,7 @@ class RolesController extends BaseController
             return $this->ajaxFail('该角色名称已经存在~');
         }
         
-        return  $this->role->store(['name' => $name]) ? 
+        return  $this->role->store(['name' => $name, 'description' => $request->input('description')]) ? 
         
                 $this->ajaxSuccess('添加成功', $this->role->getLastestRole()) : $this->ajaxFail('添加失败');
     }
@@ -124,17 +124,16 @@ class RolesController extends BaseController
      */
     public function destroy($id)
     {
-        //  
-        if ($this->role->deletePermissionsOfRole($id)) {
-            
-            $this->role->deleteUserOfRole($id);
-            
-            if ($this->role->delete($id)) {
-                return $this->ajaxFail('删除成功');
-            }
+        // 删除角色相关权限 
+        $this->role->deletePermissionsOfRole($id);
+        // 删除角色与用户关联
+        $this->role->deleteUserOfRole($id);
+        // 删除 角色
+        if ($this->role->delete($id)) {
+            return $this->ajaxSuccess('删除成功');
         }
         
-        return $this->ajaxSuccess('删除失败');
+        return $this->ajaxFail('删除失败');
     }
     
     /**
