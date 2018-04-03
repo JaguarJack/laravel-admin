@@ -1,4 +1,4 @@
-@extends('lizadmin::layouts.admin')
+@extends('lizadmin::layouts.form')
 @section('title', '编辑用户')
 @section('menu', '用户管理')
 @section('next_menu', '编辑用户')

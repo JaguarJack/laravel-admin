@@ -2,97 +2,33 @@
 @section('title', '角色管理')
 @section('menu', '权限管理')
 @section('next_menu', '角色管理')
-@section('content')
-<div class="ibox float-e-margins">
-    <div class="ibox-content">
-        <div class="row row-lg">
-            <div class="col-sm-12">
-                <div class="example-wrap">
-                    <div class="example">
-                        <div class="btn-group hidden-xs" id="toolbar" role="group">
-                        	<a href="{{ url('role/create') }}">
-                                 <button type="button" class="btn btn-w-m btn-success">
-                                    <i class="glyphicon glyphicon-plus" aria-hidden="true"></i> 添加角色
-                                 </button>
-                            </a>
-                        </div>
-                        <table id="table" data-height="400" data-mobile-responsive="true" >
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@section('addUrl', url('role/create'))
+@section('addTitle', '添加角色')
+@section('th')
+	<th>ID</th>
+    <th>角色名称</th>
+    <th>角色描述</th>
+    <th>创建时间</th>
+    <th>操作</th>
 @endsection
-@section('script')
-<script>
-$('#table').bootstrapTable({
-        url: '{{ url("getLimitRoles") }}',       
-        method: 'post',                     
-        toolbar: '#toolbar',               
-        cache: false,                  
-        pagination: true,              
-        sortable: true,                 
-        queryParams:  function (params) {
-            return { 
-                    limit: params.limit,  
-                    offset: params.offset,
-                    _token:'{{ csrf_token() }}'
-           };
-        },
-        sidePagination: "server",         
-        pageNumber:1,                   
-        pageSize: pageSize,                     
-        search: false,                   
-        strictSearch: true,
-        showColumns: true,               
-        showRefresh: true,                
-        minimumCountColumns: 2,           
-        clickToSelect: false,              
-        height: 600,                      
-        uniqueId: "ID",                  
-        showToggle:false,                
-        cardView: false,                
-        detailView: false,            
-        columns: [{
-            field: "id",
-            title: "ID",
-        },{
-            field: "name",
-            title: "角色名称",
-        },{
-            field: "description",
-            title: "角色描述",
-        },{
-            field: "created_at",
-            title: "创建时间",
-        },{
-            field: "option",
-            title: "操作",
-            align: "center",
-            formatter:function(value, row, index) {
-                return '<button type="button" class="btn btn-primary" onclick="getPermissions('+row.id+')"><i class="fa fa-paste"></i> 编辑</button> ' +
-                       '<button type="button" class="btn btn-danger" onclick="getid('+row.id+')"><i class="fa fa-trash-o"></i> 删除</button>'
-            }
-        },],
-        responseHandler:function(data){
-            if (data.msg) {
-            	swal({
-                    title: data.msg,
-                    type: "info",
-                    confirmButtonColor: "#DD6B55",
-               });
-            } else {return data;}
-        },
-    });
-function getPermissions(id)
-{
-	window.location.href = "/role/" +id+ "/edit";
-}
 
-function getid(id) {
-	_delete('/role/' + id)
-}
-</script>
+@section('tbodyTr')
+	@foreach ($roles as $role)
+        <tr>
+        	<td>{{ $role->id }}</td>
+        	<td>{{ $role->name }}</td>
+        	<td>{{ $role->description }}</td>
+        	<td>{{ $role->created_at }}</td>
+        	<td>
+        		<a href="{{ route('role.edit', [ $role->id ]) }}">
+       				<button class="btn btn-primary" type="button"><i class="fa fa-paste"></i> 编辑</button>
+       			</a>
+       			<button class="btn btn-danger" onclick="destory(this);" data-url="{{ url('role', [ $role->id ]) }}"type="button"><i class="fa fa-trash-o"></i> 删除</button>
+            </td>
+        </tr>
+    @endforeach
+@endsection
+
+@section('paginate')
+	{{ $roles->links() }}
 @endsection

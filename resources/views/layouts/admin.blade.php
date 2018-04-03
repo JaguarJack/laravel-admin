@@ -10,13 +10,14 @@
     <link href="{{ asset('/assets/css/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet">
     <link href="{{ asset('/assets/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/assets/css/style.min.css?v=4.0.0') }}" rel="stylesheet">
+    <link href="{{ asset('/assets/css/plugins/toastr/toastr.min.css') }}" rel="stylesheet">
     <script src="{{ asset('/assets/js/jquery.min.js?v=2.1.4') }}"></script>
     <script src="{{ asset('/assets/js/bootstrap.min.js?v=3.3.5') }}"></script>
     <script src="{{ asset('/assets/js/content.min.js?v=1.0.0') }}"></script>
     <script src="{{ asset('/assets/js/plugins/bootstrap-table/bootstrap-table.min.js') }}"></script>
     <script src="{{ asset('/assets/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js') }}"></script>
     <script src="{{ asset('/assets/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js') }}"></script>
-    <script src="{{ asset('/assets/js/plugins/sweetalert/sweetalert.min.js') }}"></script>
+     <script src="{{ asset('/assets/js/plugins/toastr/toastr.min.js') }}"></script>
    	@yield('resource')
 </head>
 <body class="gray-bg">
@@ -26,44 +27,67 @@
                 <h5>@yield('menu')  / @yield('next_menu')</h5>
             </div>
         </div>
-		@yield('content')
-		</div>
+		<div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="example-wrap">
+                            <div class="example">
+                                <div class="btn-group hidden-xs" id="toolbar" role="group">
+                                	<a href="@yield('addUrl')">
+                                     <button type="button" class="btn btn-w-m btn-success">
+                                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>  @yield('addTitle')
+                                     </button>
+                                    </a>
+                                </div>
+                                <table data-toggle="table" data-height="600" data-mobile-responsive="true">
+                                    <thead>
+                                       <tr>
+                                           @yield('th')
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       		@yield('tbodyTr')
+                                    </tbody>
+                                </table>
+                                <ul class="pagination">
+                                	@yield('paginate')
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
 </body>
 </html>
 <script>
-//表单每页显示的数量
-var pageSize = 10;
+toastr.options = {  
+        closeButton: true,  
+        debug: false,  
+        progressBar: true,  
+        positionClass: "toast-top-center",  
+        onclick: null,  
+        showDuration: "300",  
+        hideDuration: "1000",  
+        timeOut: "2000",  
+        extendedTimeOut: "1000",  
+        showEasing: "swing",  
+        hideEasing: "linear",  
+        showMethod: "fadeIn",  
+        hideMethod: "fadeOut"  
+    };
+	function destory(dom) {
+		var url = $(dom).attr('data-url');
 
-function formError(dom, msg) {
-	dom.parent('div').parent('.form-group').removeClass('has-success').addClass('has-error');
-	dom.next('span').html('<i class="fa fa-times-circle">'+msg+'</i>')
-}
-function _delete(url) {
-    $.post(url, {_method:"DELETE", _token:'{{ csrf_token() }}'}, function(data){
-        if (data.status == 10000) {
-        	window.location.reload();
-         } else {
-        	 swal({
-                 title: data.msg,
-                 type: "info",
-                 confirmButtonColor: "#DD6B55",
-             });
-          }
-    })
-}
-function formSubmit(url, params, type = 1) {
-	$.post(url, params, function(data){
-        if (data.status == 10001 && type == 1 ) {
-            alert(213)
-          	formError($('input[name=username]'), data.msg);
-          	return false;
-        }
-        swal({
-            title: data.msg,
-            type: (data.status == 10000 ? 'info' : "warning"),
-            confirmButtonColor: "#DD6B55",
-        });
-    })
-}
+		$.post(url, {'_token':"{{ csrf_token()}}", '_method' : 'DELETE'}, function(data) {
+				if (data.code == 10001) {
+					toastr.error(data.message);return false;
+				}
+
+				toastr.success(data.message, function(){setTimeout("window.location.reload()", 2000)})
+		}) 
+	}
 </script>
 @yield('script')

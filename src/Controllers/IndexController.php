@@ -6,18 +6,18 @@ use Lizyu\Admin\Controllers\BaseController;
 use Lizyu\Admin\Model\User;
 use Lizyu\Admin\Services\MenuService;
 use Auth;
-use Lizyu\Permission\Traits\PermissionTrait;
+use Lizyu\Permission\Contracts\PermissionContract as Permission;
 
 class IndexController extends BaseController
 {
-    use PermissionTrait;
-    
-    public function index(User $user)
+    public function index(User $user, Permission $permission, MenuService $menu)
     { 
        $loginUser = Auth::user();
-       $permissions = $loginUser->is_super == 1 ? $this->permission()->getAll() : $user->getUserOfPermissions($loginUser->id);
-       $userHavePerimssions = (new MenuService($permissions))->treeMenu();
        
+       $permissions = $loginUser->is_super == 1 ? $permission->getAllPermissions() : $user->getUserOfPermissions($loginUser->id);
+
+       $userHavePerimssions = $menu->set($permissions)->treeMenu();
+
        return view('lizadmin::index.index', [
            'menus' => $userHavePerimssions
        ]);

@@ -3,22 +3,18 @@
 namespace Lizyu\Admin\Controllers;
 
 use Lizyu\Admin\Reuqest\RoleRequest as Request;
-use Lizyu\Permission\Traits\RoleTrait;
-use Lizyu\Permission\Traits\PermissionTrait;
+use Lizyu\Permission\Contracts\RoleContract;
+use Lizyu\Permission\Contracts\PermissionContract;
 use Lizyu\Admin\Services\MenuService;
 use Lizyu\Admin\Model\User;
-use Route;
-use DB;
 
 class RolesController extends BaseController
 {
-    use RoleTrait, PermissionTrait;
-    
     protected $role;
     
-    public function __construct()
+    public function __construct(RoleContract $role)
     {
-        $this->role = $this->role();
+        $this->role = $role;
     }
     
     /**
@@ -29,7 +25,9 @@ class RolesController extends BaseController
     public function index()
     {
         //
-        return view('lizadmin::roles.index');
+        return view('lizadmin::roles.index', [
+            'roles' => $this->role->paginate(10),
+        ]);
     }
     
     /**
@@ -60,7 +58,7 @@ class RolesController extends BaseController
         
         return  $this->role->store(['name' => $name, 'description' => $request->input('description')]) ? 
         
-                $this->ajaxSuccess('添加成功', $this->role->getLastestRole()) : $this->ajaxFail('添加失败');
+                $this->ajaxSuccess('添加成功') : $this->ajaxFail('添加失败');
     }
 
     /**
@@ -80,15 +78,15 @@ class RolesController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, MenuService $menu, PermissionContract $permission)
     {
         //
         $role = $this->role->findById($id);
         
-        $permissions = (new MenuService($this->permission()->getAll()))->treeMenu();
+        $permissions = $menu->set($permission->getAllPermissions())->treeMenu();
         //dump($permissions);
         $users = (new User())->get();
-        
+       
         return view('lizadmin::roles.edit', [
             'role'        => $role,
             'permissions' => $permissions,
@@ -108,12 +106,12 @@ class RolesController extends BaseController
         $name= $request->input('name');
         
         if ($this->role->findByName($name)) {
-            return $this->ajaxFail('该角色名称已经存在~');
+            return $this->ajaxFail('该角色名称已经存在');
         }
         
-        $data = ['id' => $id, 'name' => $name, 'description' => $request->input('description')];
+        $data = ['name' => $name, 'description' => $request->input('description')];
         
-        return $this->role->update($data) ? $this->ajaxSuccess('更新成功~') : $this->ajaxFail('更新失败~');
+        return $this->role->updateBy($data, $id) ? $this->ajaxSuccess('更新成功') : $this->ajaxFail('更新失败');
     }
 
     /**
@@ -129,7 +127,7 @@ class RolesController extends BaseController
         // 删除角色与用户关联
         $this->role->deleteUserOfRole($id);
         // 删除 角色
-        if ($this->role->delete($id)) {
+        if ($this->role->destory($id)) {
             return $this->ajaxSuccess('删除成功');
         }
         

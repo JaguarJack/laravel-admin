@@ -3,19 +3,18 @@
 namespace Lizyu\Admin\Controllers;
 
 use Lizyu\Admin\Reuqest\PermissionRequest as Request;
-use Lizyu\Permission\Traits\PermissionTrait;
+use Lizyu\Permission\Contracts\PermissionContract;
 use Lizyu\Admin\Services\MenuService;
-use Lizyu\Permission\Traits\RoleTrait;
+use Lizyu\Permission\Contracts\RoleContract;
 
 class PermissionsController extends BaseController
 {
-    use PermissionTrait, RoleTrait;
     
     protected $permissions;
     
-    public function __construct()
+    public function __construct(PermissionContract $permission)
     {
-        $this->permissions = $this->permission();
+        $this->permissions = $permission;
     }
     
     /**
@@ -23,13 +22,13 @@ class PermissionsController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(MenuService $menu)
     {
         //
-        $permissions = $this->permissions->getAll();
-        
+        $permissions = $this->permissions->getAllPermissions();
+
         return view('lizadmin::permissions.index', [
-            'permissions' => (new MenuService($permissions))->sortMenu(),
+            'permissions' => $menu->set($permissions)->sortMenu(),
         ]);
     }
 
@@ -81,7 +80,7 @@ class PermissionsController extends BaseController
         
         return $this->permissions->store($permission) ?
             
-        $this->ajaxSuccess('添加成功', $this->permissions->getLastestPermission()) : $this->ajaxFail('添加失败');
+                $this->ajaxSuccess('添加成功') : $this->ajaxFail('添加失败');
         
     }
     
@@ -90,22 +89,22 @@ class PermissionsController extends BaseController
      * @author: wuyanwen <wuyanwen1992@gmail.com>
      * @date:2018年1月21日
      */
-    public function getPermissions(Request $request)
+    public function getPermissions(Request $request, RoleContract $role, PermissionContract $permission, MenuService $menu)
     {
-        $permissions = $this->permissions->getAll();
-        $roleOfPermissions = $this->role()->getPermissionsOfRole($request->input('role_id'));
+        $permissions = $permission->getAllPermissions();
+        $roleOfPermissions = $role->getPermissionsOfRole($request->input('role_id'));
         
         $permissions = $permissions->each(function($item, $key) use ($roleOfPermissions, $permissions){
             $permissions[$key]->checked = $roleOfPermissions->contains($item) ? true : false;
         });
         
-        $permissions= (new MenuService($permissions))->treeMenu();
+        $permissions= $menu->set($permissions)->treeMenu();
         
         $menu = [];
         foreach ($permissions as $permission) {
             $menu[] = $permission;
         }
-        
+    
         return response()->json(['rows' => $menu]);
     }
     
@@ -118,8 +117,8 @@ class PermissionsController extends BaseController
     public function update($id, Request $request)
     {
         $permission = $request->except(['_token', '_method']);
-        $permission['id'] = $id;
-        return $this->permissions->update($permission) ? $this->ajaxSuccess('更新成功') : $this->ajaxFail('更新失败');
+        
+        return $this->permissions->updateBy($permission, $id) ? $this->ajaxSuccess('更新成功') : $this->ajaxFail('更新失败');
     }
     
      /**
@@ -134,9 +133,9 @@ class PermissionsController extends BaseController
             return $this->ajaxFail('请先删除子菜单');
         }
         
-        $this->permission()->deletePermissionOfRole($id);
+        $this->permissions->deletePermissionOfRole($id);
         
-        return $this->permissions->delete($id) ? $this->ajaxSuccess('删除成功') : $this->ajaxFail('删除失败');
+        return $this->permissions->destory($id) ? $this->ajaxSuccess('删除成功') : $this->ajaxFail('删除失败');
     }
 
 }

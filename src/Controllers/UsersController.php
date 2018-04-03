@@ -4,11 +4,10 @@ namespace Lizyu\Admin\Controllers;
 
 use Lizyu\Admin\Reuqest\UserRequest as Request;
 use Lizyu\Admin\Model\User;
-use Lizyu\Permission\Traits\RoleTrait;
+use Lizyu\Permission\Contracts\RoleContract;
 
 class UsersController extends BaseController
 {
-    use RoleTrait;
     protected  $user;
     
     public function __construct(User $user)
@@ -64,7 +63,7 @@ class UsersController extends BaseController
             return $this->ajaxFail('该邮箱地址已存在~');
         }
         
-        return  $this->user->save() ? $this->ajaxSuccess('添加成功', $this->user->orderBy('id', 'desc')->first()) : $this->ajaxFail('添加失败');
+        return  $this->user->save() ? $this->ajaxSuccess('添加成功') : $this->ajaxFail('添加失败');
     }
 
     /**
@@ -162,16 +161,16 @@ class UsersController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getRolesOfUser(Request $request)
+    public function getRolesOfUser(Request $request, RoleContract $role)
     {
         if ($request->isMethod('POST')) {
-            $roles =  $this->role()->paginate(intval($request->input('offset')), 10);
+            $roles =  $role->paginate(intval($request->input('offset')), 10);
             $rolesOfUsers = $this->user->find($request->input('user_id'))->getRolesOfUser();
             $roles = $roles->each(function($item, $key) use ($rolesOfUsers, $roles){
                 $roles[$key]->check = $rolesOfUsers->contains($item) ? true : false;
             });
             return response()->json([
-                'total' => $this->role()->count(),
+                'total' => $role->count(),
                 'rows'  => $roles,
             ]);
         }

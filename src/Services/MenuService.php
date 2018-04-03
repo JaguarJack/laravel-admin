@@ -5,13 +5,7 @@ namespace Lizyu\Admin\Services;
 class MenuService
 {
     private $menu;
-    
-    public function __construct($menu)
-    {
-        $this->menu = $menu;
-    }
-    
-    
+       
     /**
      * @description:tree menu
      * @author: wuyanwen <wuyanwen1992@gmail.com>
@@ -29,18 +23,18 @@ class MenuService
             if ($menu->pid == $pid) {
                 $menu->level = $level;
                 $tree_menu[$key] = $menu;
-                $tree_menu[$key]['children'] = array_merge($this->treeMenu($menu->id, ++$level));
+                $tree_menu[$key]['children'] = $this->treeMenu($menu->id, ++$level);
                 unset($this->menu[$key]);
             }
         });
-        
-        return $tree_menu;
+            
+            return $tree_menu;
     }
     
     public function sortMenu($pid = 0, $level = 0)
     {
         $tree_menu = [];
-       
+        
         $this->menu->each(function($menu, $key) use (&$tree_menu, $pid, $level){
             if ($menu->pid == $pid) {
                 $menu->level = $level;
@@ -49,9 +43,16 @@ class MenuService
                 unset($this->menu[$key]);
             }
         });
-        
-        return $tree_menu;
+            
+            return $tree_menu;
     }
    
+    
+    public function set($value)
+    {
+        $this->menu = $value;
+        
+        return $this;
+    }
 }
 

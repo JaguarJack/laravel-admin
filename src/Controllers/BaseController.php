@@ -14,11 +14,11 @@ class BaseController extends Controller
      * @param unknown $data
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function ajaxSuccess($msg = '', $data = null)
+    protected function ajaxSuccess(string $msg = '', array $data = null)
     {
         return response()->json([
             'status'  =>  10000,
-            'msg'     =>  $msg,
+            'message' =>  $msg,
             'data'    =>  $data,
         ]);
     }
@@ -31,11 +31,11 @@ class BaseController extends Controller
      * @param unknown $data
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function ajaxFail($msg = '', $data = null)
+    protected function ajaxFail(string $msg = '', array $data = null)
     {
         return response()->json([
             'status'  =>  10001,
-            'msg'     =>  $msg,
+            'message' =>  $msg,
             'data'    =>  $data,
         ]);
     }
