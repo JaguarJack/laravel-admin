@@ -126,7 +126,7 @@ $('.authuser').click(function () {
 	params.user_id = "{{$user->id}}"
 	params._token  = '{{ csrf_token() }}'
 	$.post("{{url('giveRoleToUser')}}", params, function(data){
-		if (data.code == 10000) {
+		if (data.status == 10000) {
 			success(data.message);
 		} else {
 			error(data.message);
@@ -138,7 +138,7 @@ $('.save').click(function(){
 	var data = $("form").serializeObject();
 	
 	$.post("{{ url('user', [ $user->id ]) }}", data, function(data){
-			if (data.code == 10001) {
+			if (data.status == 10001) {
 				return error(data.message);
 			}
 			success(data.message);

@@ -18,7 +18,7 @@ Route::namespace('Lizyu\\Admin\\Controllers')->middleware(['web'])->group(functi
     
     /* RolesController */
     Route::resource('role', 'RolesController')->middleware('auth','checkPermission');
-    Route::post('getLimitRoles', 'RolesController@getLimitRoles')>middleware('auth');
+    Route::post('getLimitRoles', 'RolesController@getLimitRoles')->middleware('auth');
     Route::post('givePermissionsToRole', 'RolesController@givePermissionsToRole')->middleware('auth','checkPermission');
     
     /* PermissionsController */
