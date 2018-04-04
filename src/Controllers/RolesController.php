@@ -51,10 +51,6 @@ class RolesController extends BaseController
     {
         //
         $name = $request->input('name');
-      
-        if ($this->role->findByName($name)) {
-            return $this->ajaxFail('该角色名称已经存在~');
-        }
         
         return  $this->role->store(['name' => $name, 'description' => $request->input('description')]) ? 
         
@@ -104,10 +100,6 @@ class RolesController extends BaseController
     public function update(Request $request, $id)
     {
         $name= $request->input('name');
-        
-        if ($this->role->findByName($name)) {
-            return $this->ajaxFail('该角色名称已经存在');
-        }
         
         $data = ['name' => $name, 'description' => $request->input('description')];
         
