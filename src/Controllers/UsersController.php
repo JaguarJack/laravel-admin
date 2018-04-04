@@ -74,9 +74,7 @@ class UsersController extends BaseController
      */
     public function show($id)
     {
-        return view('lizadmin::users.show', [
-            'user' => $this->user::find($id),
-        ]);
+        
     }
 
     /**
@@ -88,6 +86,9 @@ class UsersController extends BaseController
     public function edit($id, Request $request)
     {
         //
+        return view('lizadmin::users.edit', [
+            'user' => $this->user::find($id),
+        ]);
     }
     
     /**
@@ -119,6 +120,7 @@ class UsersController extends BaseController
         if ($password) {
             $user->password = bcrypt($password);
         }
+        
         $user->is_super = $is_super;
         
         return $user->save() ? $this->ajaxSuccess('更新成功') : $this->ajaxFail('更新失败', ['field' => 'username']);
@@ -164,7 +166,7 @@ class UsersController extends BaseController
     public function getRolesOfUser(Request $request, RoleContract $role)
     {
         if ($request->isMethod('POST')) {
-            $roles =  $role->paginate(intval($request->input('offset')), 10);
+            $roles =  $role->offset(intval($request->input('offset')))->limit(intval($request->input('limit')))->get();
             $rolesOfUsers = $this->user->find($request->input('user_id'))->getRolesOfUser();
             $roles = $roles->each(function($item, $key) use ($rolesOfUsers, $roles){
                 $roles[$key]->check = $rolesOfUsers->contains($item) ? true : false;

@@ -48,10 +48,8 @@ $('.save').click(function(){
 			if (data.code == 10001) {
 				return error(data.message);
 			}
-			
 			success(data.message);
 	})
-	
 	return false;
 })
 </script>

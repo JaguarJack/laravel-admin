@@ -14,7 +14,7 @@ class MenuService
      * @param number $level
      * @return \Illuminate\Support\Collection|unknown
      */
-    public function treeMenu($pid = 0, $level= 1)
+    public function treeMenu($pid = 0, $level= 0)
     {
         $tree_menu = [];
         
@@ -23,12 +23,12 @@ class MenuService
             if ($menu->pid == $pid) {
                 $menu->level = $level;
                 $tree_menu[$key] = $menu;
-                $tree_menu[$key]['children'] = $this->treeMenu($menu->id, ++$level);
+                $tree_menu[$key]['children'] = array_merge($this->treeMenu($menu->id, ++$level));
                 unset($this->menu[$key]);
             }
         });
             
-            return $tree_menu;
+        return $tree_menu;
     }
     
     public function sortMenu($pid = 0, $level = 0)

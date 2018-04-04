@@ -11,7 +11,7 @@
     <link href="{{ asset('/assets/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/assets/css/style.min.css?v=4.0.0') }}" rel="stylesheet"><base target="_blank">
     <link href="{{ asset('/assets/css/plugins/toastr/toastr.min.css') }}" rel="stylesheet">
-	 <script src="{{ asset('/assets/js/jquery.min.js?v=2.1.4') }}"></script>
+	<script src="{{ asset('/assets/js/jquery.min.js?v=2.1.4') }}"></script>
     <script src="{{ asset('/assets/js/bootstrap.min.js?v=3.3.5') }}"></script>
     <script src="{{ asset('/assets/js/content.min.js?v=1.0.0') }}"></script>
     <script src="{{ asset('/assets/js/plugins/iCheck/icheck.min.js') }}"></script>
@@ -22,13 +22,16 @@
     @yield('resource')
 </head>
 <body class="gray-bg">
+	
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
-                <div class="ibox float-e-margins">
+            	<div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>@yield('menu')  / @yield('title')</h5>
+                        <h5>@yield('menu')  / @yield('next_menu')</h5>
                     </div>
+                </div>
+                <div class="ibox float-e-margins">
                     <div class="ibox-content">
                     	@yield('content')
                     </div>

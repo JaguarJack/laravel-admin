@@ -89,9 +89,13 @@ class PermissionsController extends BaseController
      * @author: wuyanwen <wuyanwen1992@gmail.com>
      * @date:2018年1月21日
      */
-    public function getPermissions(Request $request, RoleContract $role, PermissionContract $permission, MenuService $menu)
-    {
-        $permissions = $permission->getAllPermissions();
+    public function getPermissions(
+        Request $request, 
+        RoleContract $role, 
+        PermissionContract $permission, 
+        MenuService $menu
+    ){
+        $permissions = $permission->select('id', 'pid', 'name')->get();
         $roleOfPermissions = $role->getPermissionsOfRole($request->input('role_id'));
         
         $permissions = $permissions->each(function($item, $key) use ($roleOfPermissions, $permissions){
@@ -104,7 +108,7 @@ class PermissionsController extends BaseController
         foreach ($permissions as $permission) {
             $menu[] = $permission;
         }
-    
+        
         return response()->json(['rows' => $menu]);
     }
     

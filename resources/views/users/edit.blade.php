@@ -3,6 +3,11 @@
 @section('menu', '用户管理')
 @section('next_menu', '编辑用户')
 @section('resource')
+<link href="{{ asset('/assets/css/plugins/bootstrap-table/bootstrap-table.min.css') }}" rel="stylesheet">
+<script src="{{ asset('/assets/js/content.min.js?v=1.0.0') }}"></script>
+<script src="{{ asset('/assets/js/plugins/bootstrap-table/bootstrap-table.min.js') }}"></script>
+<script src="{{ asset('/assets/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js') }}"></script>
+<script src="{{ asset('/assets/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js') }}"></script>
 @endsection
 @section('content')
 <div class="ibox float-e-margins">
@@ -22,7 +27,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">用户名：</label>
                                         <div class="col-sm-8">
-                                            <input id="username" name="username" value="{{ $user->name }}" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
+                                            <input id="username" name="name" value="{{ $user->name }}" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -52,9 +57,11 @@
                                            <span class="onoffswitch-inner"></span>
                                            <span class="onoffswitch-switch"></span></label></div></div>
                                     </div>
+                                    {{ csrf_field() }}
+                                    {{ method_field('PUT') }}
                                     <div class="form-group">
                                         <div class="col-sm-8 col-sm-offset-3">
-                                            <button class="btn btn-w-m btn-primary">提交</button>
+                                            <button class="btn btn-w-m btn-primary save" onclick="return false;">提交</button>
                                             <button class="btn btn-w-m btn-warning" onclick="history.go(-1);return false;">返回</button>
                                         </div>
                                     </div>
@@ -75,9 +82,6 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('/assets/js/plugins/validate/jquery.validate.min.js' )}}"></script>
-<script src="{{ asset('/assets/js/plugins/validate/messages_zh.min.js' )}}"></script>
-<script src="{{ asset('/assets/js/demo/form-validate-demo.min.js' )}}"></script>
 <link href="{{ asset('/assets/css/plugins/switchery/switchery.css' )}}" rel="stylesheet">
 <script src="{{ asset('/assets/js/plugins/switchery/switchery.js' )}}"></script>
 <script>
@@ -118,44 +122,29 @@ $('.authuser').click(function () {
         return row.id;
     });
     var params = {}
-	params['role'] = ids
-	params['user_id'] = "{{$user->id}}"
-	params['_token'] = '{{ csrf_token() }}'
-    formSubmit("{{url('giveRoleToUser')}}", params);
+	params.role    = ids
+	params.user_id = "{{$user->id}}"
+	params._token  = '{{ csrf_token() }}'
+	$.post("{{url('giveRoleToUser')}}", params, function(data){
+		if (data.code == 10000) {
+			success(data.message);
+		} else {
+			error(data.message);
+		}
+	});
+	return false;
 });
-$("#editUserInfo").validate({
-	rules: {
-      username: {
-        required: true,
-        minlength: 2,
-        maxlength: 15,
-      },
-      password: {
-        minlength: 5,
-        maxlength:20,
-      },
-      confirm_password: {
-        minlength: 5,
-        equalTo: "#password"
-      },
-      email: {
-        required: true,
-        email: true,
-      },is_super: {
-          required: true,
-        },
-    },
-    submitHandler:function(form){
-        var params = {}
-    	params['name'] = $('input[name=username]').val()
-    	params['email'] = $('input[name=email]').val()
-    	params['password'] = $('input[name=password]').val()
-    	params['is_super'] = $('input[name=is_super]').val()
-    	params['_token'] = "{{ csrf_token() }}"
-    	params['_method'] = 'PUT'
-        formSubmit("{{ url('user', [ $user->id ]) }}", params);
-    }  
-});
+$('.save').click(function(){
+	var data = $("form").serializeObject();
+	
+	$.post("{{ url('user', [ $user->id ]) }}", data, function(data){
+			if (data.code == 10001) {
+				return error(data.message);
+			}
+			success(data.message);
+	})
+	return false;
+})
 $('#editUserInfo').on('change', '.onoffswitch-checkbox', function(){
 	$(this).val($(this).val() == 1 ? 2 : 1);
 })

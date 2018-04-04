@@ -18,14 +18,14 @@
                     	<form class="form-horizontal m-t" id="editRole">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">角色名：</label>
-                                <div class="col-sm-8">
-                                    <input id="name" name="name" value="{{$role->name}}"class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
+                                <div class="col-sm-4">
+                                    <input id="name" name="name" value="{{ $role->name }}"class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">角色描述：</label>
-                                <div class="col-sm-8">
-                                    <input id="description" name="description" value="{{$role->description}}"class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
+                                <div class="col-sm-4">
+                                    <input id="description" name="description" value="{{ $role->description }}"class="form-control" type="text" aria-required="true" aria-invalid="true" class="error">
                                 </div>
                             </div>
                             {{ csrf_field() }}
@@ -81,22 +81,20 @@ $('.save').click(function(){
 </script>
 <SCRIPT type="text/javascript">
 	var setting = {
-		view: {
-		},
-		check: {
-			enable: true
-		},
-		data: {
-			simpleData: {
-				enable: true
-			}
-		},callback:{
-			onCheck:onCheck
-		}
+		view: {},
+		check: {enable: true},
+		data: {simpleData: {enable: true}},
+		callback:{onCheck:onCheck}
 	};
-
+	var zNodes = [
+		   {name:"test1", open:true, children:[
+		      {name:"test1_1"}, {name:"test1_2"}]},
+		   {name:"test2", open:true, children:[
+		      {name:"test2_1"}, {name:"test2_2"}]}
+		   ];
 	$(document).ready(function(){
 		$.get('{{ url("getPermissions")}}',{role_id:"{{ $role->id }}"},function(data){
+			console.log(data.rows)
 			$.fn.zTree.init($("#treeDemo"), setting, data.rows);
 		})
 		
@@ -111,7 +109,7 @@ $('.save').click(function(){
             ids.push(nodes[i].id); //获取选中节点的值
         }
     }
-   
+	
 	 $(".submitPer").click(function(){
 		var params = {}
 		params.role_id    = "{{ $role->id }}"

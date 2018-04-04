@@ -22,7 +22,7 @@
         	<td>{{ $user->is_super == 1 ? '否' : '否' }}</td>
         	<td>{{ $user->created_at }}</td>
         	<td>
-        		<a href="{{ url('user', [$user->id]) }}">
+        		<a href="{{ route('user.edit', [$user->id]) }}">
        				<button class="btn btn-primary" type="button"><i class="fa fa-paste"></i> 编辑</button>
        			</a>
        			<button class="btn btn-danger" onclick="destory(this);" data-url="{{ url('user', [$user->id]) }}"type="button"><i class="fa fa-trash-o"></i> 删除</button>
