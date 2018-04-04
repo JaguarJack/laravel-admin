@@ -20,7 +20,7 @@ class UsersController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         return view('lizadmin::users.index', [
             'users' => $this->user::paginate(10),
@@ -83,7 +83,7 @@ class UsersController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, Request $request)
+    public function edit($id)
     {
         //
         return view('lizadmin::users.edit', [
@@ -132,10 +132,11 @@ class UsersController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function destroy($id)
     {
         //
         $user = $this->user->find($id);
+
         if ($user->delete()) {
             $user->deleteRolesOfUser();
             return $this->ajaxSuccess('删除成功');
@@ -163,8 +164,9 @@ class UsersController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getRolesOfUser(Request $request, RoleContract $role)
+    public function getRolesOfUser(RoleContract $role)
     {
+        $request = app('request');
         if ($request->isMethod('POST')) {
             $roles =  $role->offset(intval($request->input('offset')))->limit(intval($request->input('limit')))->get();
             $rolesOfUsers = $this->user->find($request->input('user_id'))->getRolesOfUser();
@@ -179,38 +181,15 @@ class UsersController extends BaseController
     }
     
     /**
-     * @description:超级用户
-     * @author: wuyanwen <wuyanwen1992@gmail.com>
-     * @date:2018年3月9日
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function changeStatus(Request $request)
-    {
-        $user_id = $request->input('id', 0);
-        $status  = $request->input('status', 0);
-        
-        if (!$user_id) {
-            return $this->ajaxFail('没有该用户数据');
-        }
-        
-        if (!in_array($status, [1, 2])) {
-            return $this->ajaxFail('没有该状态值');
-        }
-        
-        return $this->user->updateUserById($user_id, ['is_super' => $status]) ? 
-               
-                $this->ajaxSuccess('', ['status' => $status]) : $this->ajaxFail('更新失败');
-    }
-    
-    /**
      * @description:分配角色
      * @author: wuyanwen <wuyanwen1992@gmail.com>
      * @date:2018年1月20日
      * @param Request $request
      */
-    public function giveRoleToUser(Request $request)
+    public function giveRoleToUser()
     {
+        $request = app('request');
+        
         $user_id = $request->post('user_id', 0, 'intval');
         $role    = $request->post('role');
         

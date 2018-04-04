@@ -141,8 +141,9 @@ class RolesController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getLimitRoles(Request $request)
+    public function getLimitRoles()
     {
+        $request = app('requrest');
         $offset = $request->input('offset');
         $limit  = $request->input('limit');
         return response()->json([
@@ -157,8 +158,9 @@ class RolesController extends BaseController
      * @date:2018年3月6日
      * @param Request $request
      */
-    public function givePermissionsToRole(Request $request)
+    public function givePermissionsToRole()
     {
+        $request     = app('requrest');
         $role_id     = $request->post('role_id', 0, 'intval');
         $permissions = $request->post('permission');
 

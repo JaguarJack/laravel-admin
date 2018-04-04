@@ -3,6 +3,7 @@
 namespace Lizyu\Admin;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class LizAdminServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,7 @@ class LizAdminServiceProvider extends ServiceProvider
     {
         //
         $this->requireView();
+        $this->registerValdateRule();
     }
     
     /**
@@ -51,7 +53,18 @@ class LizAdminServiceProvider extends ServiceProvider
         $this->loadRoutesFrom( __DIR__ . '/route.php' );
     }
     
-    public function requireView()
+    /**
+     * @description:注册验证规则
+     * @author wuyanwen(2018年4月4日)
+     */
+    protected function registerValdateRule()
+    {
+        Validator::extend('behavior', function($attribute, $value, $parameters){
+            return preg_match('/^[a-z]{4,20}\@[a-z]{4,20}$/', $value);
+        }); 
+    }
+    
+    protected function requireView()
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views/', 'lizadmin');
     }

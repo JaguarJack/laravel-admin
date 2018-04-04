@@ -73,9 +73,25 @@
             });
             return o;
         };
+        //错误信息
         function error(message) {toastr.error(message);return false;}
-
+        //成功信息
         function success(message, time = 2000){toastr.success(message, function(time){setTimeout("self.location=document.referrer;", time)}(time));}
+
+		//form提交
+    	function formSubmit(dom)
+    	{
+    		var data = $("form").serializeObject();
+    		
+    		$.post($(dom).attr('data-url'), data, function(data){
+    				if (data.status == 10001) {
+    					return error(data.message);
+    				}
+    				success(data.message);
+    		})
+    		
+    		return false;
+    	}
     </script>
 </body>
 </html>

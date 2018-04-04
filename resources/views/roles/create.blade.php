@@ -21,26 +21,9 @@
         {{ csrf_field() }}
         <div class="form-group">
             <div class="col-sm-8 col-sm-offset-3">
-                <button class="btn btn-primary save" onclick="return false;">提交</button>
+                <button class="btn btn-primary" data-url="{{ url('role') }}" onclick="formSubmit(this);return false;">提交</button>
                 <button class="btn btn-white" onclick="history.go(-1);return false;">返回</button>
             </div>
         </div>
     </form>
-@endsection
-@section('script')
-<script>
-$('.save').click(function(){
-	var data = $("form").serializeObject();
-	
-	$.post("{{ url('role') }}", data, function(data){
-		if (data.code == 10001) {
-			return error(data.message);
-		}
-		
-		success(data.message);
-	})
-	
-	return false;
-})    
-</script>
 @endsection

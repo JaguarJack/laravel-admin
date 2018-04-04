@@ -45,7 +45,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">确认密码：</label>
                                         <div class="col-sm-8">
-                                            <input id="confirm_password" name="confirm_password" class="form-control" type="password">
+                                            <input id="confirm_password" name="password_confirmation" class="form-control" type="password">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -59,9 +59,10 @@
                                     </div>
                                     {{ csrf_field() }}
                                     {{ method_field('PUT') }}
+                                    <input type="hidden" name="id" value="{{ $user->id }}">
                                     <div class="form-group">
                                         <div class="col-sm-8 col-sm-offset-3">
-                                            <button class="btn btn-w-m btn-primary save" onclick="return false;">提交</button>
+                                            <button class="btn btn-w-m btn-primary" data-url = "{{ url('user', [ $user->id ]) }}" onclick="formSubmit(this);return false;">提交</button>
                                             <button class="btn btn-w-m btn-warning" onclick="history.go(-1);return false;">返回</button>
                                         </div>
                                     </div>
@@ -134,17 +135,7 @@ $('.authuser').click(function () {
 	});
 	return false;
 });
-$('.save').click(function(){
-	var data = $("form").serializeObject();
-	
-	$.post("{{ url('user', [ $user->id ]) }}", data, function(data){
-			if (data.status == 10001) {
-				return error(data.message);
-			}
-			success(data.message);
-	})
-	return false;
-})
+
 $('#editUserInfo').on('change', '.onoffswitch-checkbox', function(){
 	$(this).val($(this).val() == 1 ? 2 : 1);
 })
