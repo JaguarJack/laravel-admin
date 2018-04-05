@@ -9,7 +9,7 @@ class UserRequest extends Requests
     
     public function rules()
     {
-        $table = config('auth.providers.' . config('auth.guards.admin.provider') . '.table');
+        $table = config('admin.table');
         
         $sometimes = $this->id ? 'nullable|sometimes' : '|required';
         
