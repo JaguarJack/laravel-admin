@@ -25,14 +25,14 @@
                 <ul class="nav" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <span><img alt="image" class="img-circle" src="{{ asset('/assets/img/profile_small.jpg') }}" /></span>
+                            <span><img alt="image" class="img-circle" src="{{ asset('/assets/img/header.jpg') }}" /></span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                 <span class="text-muted text-xs block"><strong>{{ Auth::user()->name }}</strong><b class="caret"></b></span>
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="J_menuItem" href="profile.html">个人资料</a>
+                                <li><a class="J_menuItem" href="{{ route('user.edit', [ Auth::user()->id ]) }}">个人资料</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li><a href="{{ route('logout') }}">安全退出</a>

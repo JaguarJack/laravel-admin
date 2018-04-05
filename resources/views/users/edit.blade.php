@@ -62,8 +62,8 @@
                                     <input type="hidden" name="id" value="{{ $user->id }}">
                                     <div class="form-group">
                                         <div class="col-sm-8 col-sm-offset-3">
-                                            <button class="btn btn-w-m btn-primary" data-url = "{{ url('user', [ $user->id ]) }}" onclick="formSubmit(this);return false;">提交</button>
-                                            <button class="btn btn-w-m btn-warning" onclick="history.go(-1);return false;">返回</button>
+                                            <button class="btn btn-primary" data-url = "{{ url('user', [ $user->id ]) }}" onclick="formSubmit(this);return false;">提交</button>
+                                            <button class="btn  btn-white" onclick="history.go(-1);return false;">返回</button>
                                         </div>
                                     </div>
                                 </form>

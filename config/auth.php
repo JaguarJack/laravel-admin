@@ -78,6 +78,7 @@ return [
         'admin_users' => [
             'driver' => 'eloquent',
             'model'  => Lizyu\Admin\Model\User::class,
+            'table'  => 'users',
         ],
         
         // 'users' => [

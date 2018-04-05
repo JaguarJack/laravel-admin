@@ -54,7 +54,15 @@ class UsersController extends BaseController
         $this->user->name     = $name;
         $this->user->password = $password;
         $this->user->email    = $email;
-
+        
+        if ($this->user->isNameExist($name)) {
+            return $this->ajaxFail('该用户名已存在~');
+        }
+        
+        if ($this->user->isEmailExist($email)) {
+            return $this->ajaxFail('该邮箱地址已存在~');
+        }
+        
         return  $this->user->save() ? $this->ajaxSuccess('添加成功') : $this->ajaxFail('添加失败');
     }
 
@@ -98,6 +106,14 @@ class UsersController extends BaseController
         $email    = $request->input('email');
         $password = $request->input('password');
         $is_super = $request->input('is_super');
+        
+        if ($this->user->isNameExist($name, $id)) {
+            return $this->ajaxFail('该用户名已经存在', ['field' => 'username']);
+        }
+        
+        if ($this->user->isEmailExist($email, $id)) {
+            return $this->ajaxFail('该邮箱地址已被注册', ['field' => 'email']);
+        }
         
         $user->name  = $name;
         $user->email = $email;

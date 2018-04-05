@@ -50,9 +50,7 @@ class RolesController extends BaseController
     public function store(Request $request)
     {
         //
-        $name = $request->input('name');
-        
-        return  $this->role->store(['name' => $name, 'description' => $request->input('description')]) ? 
+        return  $this->role->store(['name' => $request->input('name'), 'description' => $request->input('description')]) ? 
         
                 $this->ajaxSuccess('添加成功') : $this->ajaxFail('添加失败');
     }
@@ -99,9 +97,7 @@ class RolesController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $name= $request->input('name');
-        
-        $data = ['name' => $name, 'description' => $request->input('description')];
+        $data = ['name' => $request->input('name'), 'description' => $request->input('description')];
         
         return $this->role->updateBy($data, $id) ? $this->ajaxSuccess('更新成功') : $this->ajaxFail('更新失败');
     }
