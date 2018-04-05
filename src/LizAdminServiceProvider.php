@@ -36,7 +36,7 @@ class LizAdminServiceProvider extends ServiceProvider
     {
         $this->publishes([ 
             __DIR__  . '/../resources/assets/' => $this->app->publicPath() . '/assets/',
-        ], 'lizyu.assets');
+        ], 'admin.assets');
     }
     
     protected function publishConfig()
@@ -45,7 +45,7 @@ class LizAdminServiceProvider extends ServiceProvider
             __DIR__  . '/../config/auth.php' => $this->app->configPath() . '/auth.php',
             __DIR__  . '/../database/create_users_table.php' => $this->app->databasePath() . '/migrations/'.date('Y_m_d_His', time()).'_create_users_table.php',
             __DIR__  . '/../database/seeds/UsersTableSeeder.php' => $this->app->databasePath() . '/seeds//UsersTableSeeder.php',
-        ], 'lizyu.config');
+        ], 'admin.config');
     }
     
     protected function requireRoute()
