@@ -9,8 +9,8 @@ composer require "lizyu/admin"
  #### 需要删除Laravel自带的User table 启用新的user结构T
  ### 首先安装permission [lizyu/permission](https://github.com/yanwenwu/laravel-permission).
  1. 添加服务 在confit/app.php “providers”数组加入  Lizyu\Admin\LizAdminServiceProvider::class服务
- 2. 发布静态资源 php artisan vendor:publish --provider="Lizyu\Admin\LizAdminServiceProvider" --tag="lizyu.assets"
- 3. 发布配置文件以及migration php artisan vendor:publish --provider="Lizyu\Admin\LizAdminServiceProvider" --tag="lizyu.config"
+ 2. 发布静态资源 php artisan vendor:publish --provider="Lizyu\Admin\LizAdminServiceProvider" --tag="admin.assets"
+ 3. 发布配置文件以及migration php artisan vendor:publish --provider="Lizyu\Admin\LizAdminServiceProvider" --tag="admin.config"
  4. 填充数据 之前需要composer dump-autoload 然后 php artisan db:seed --class=UsersTableSeeder
  5. 直接访问后台  **域名/login**
 
