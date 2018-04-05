@@ -41,10 +41,13 @@ class LizAdminServiceProvider extends ServiceProvider
     
     protected function publishConfig()
     {
+        if (file_exists($this->app->configPath() . '/auth.php')) {
+            unlink($this->app->configPath() . '/auth.php');
+        }
         $this->publishes([
             __DIR__  . '/../config/auth.php' => $this->app->configPath() . '/auth.php',
             __DIR__  . '/../database/create_users_table.php' => $this->app->databasePath() . '/migrations/'.date('Y_m_d_His', time()).'_create_users_table.php',
-            __DIR__  . '/../database/seeds/UsersTableSeeder.php' => $this->app->databasePath() . '/seeds//UsersTableSeeder.php',
+            __DIR__  . '/../database/seeds/UsersTableSeeder.php' => $this->app->databasePath() . '/seeds/UsersTableSeeder.php',
         ], 'admin.config');
     }
     
