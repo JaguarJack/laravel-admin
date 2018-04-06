@@ -148,10 +148,11 @@ class RolesController extends BaseController
      */
     public function givePermissionsToRole()
     {
-        $request     = app('requrest');
+        $request     = app('request');
+
         $role_id     = $request->post('role_id', 0, 'intval');
         $permissions = $request->post('permission');
-
+        
         $this->role->storePermissionsOfRole($role_id, $permissions);
         
         return $this->ajaxSuccess('授权成功');

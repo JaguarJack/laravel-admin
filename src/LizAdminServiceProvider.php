@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Validator;
 
 class LizAdminServiceProvider extends ServiceProvider
 {
-    protected $defer = true;
-    
     /**
      * Bootstrap the application services.
      *
@@ -19,6 +17,7 @@ class LizAdminServiceProvider extends ServiceProvider
         //
         $this->requireView();
         $this->registerValdateRule();
+        $this->publishConfig();
     }
     
     /**
@@ -31,7 +30,6 @@ class LizAdminServiceProvider extends ServiceProvider
         //
         $this->requireRoute();
         $this->publishAssets();
-        $this->publishConfig();
         $this->mergeAuth();
     }
 
@@ -63,7 +61,7 @@ class LizAdminServiceProvider extends ServiceProvider
      */
     public function mergeAuth()
     {
-        $this->app->make('config')->set('auth', array_merge_recursive(config('admin.auth'), config('auth')));
+        $this->app->make('config')->set('auth', array_merge_recursive(config('admin.auth', []), config('auth')));
     }
     
     /**

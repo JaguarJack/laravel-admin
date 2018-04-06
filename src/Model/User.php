@@ -11,7 +11,12 @@ use Lizyu\Permission\Traits\HasPermissionsTrait;
 class User extends Authenticatable
 {
     use Notifiable, HasRoleTrait, HasPermissionsTrait;
-    
+
+    public function __construct()
+    {
+        $this->table = config('admin.table');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,7 +25,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *

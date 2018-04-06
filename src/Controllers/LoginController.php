@@ -4,6 +4,7 @@ namespace Lizyu\Admin\Controllers;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Auth;
 
 class LoginController extends BaseController
 {
@@ -49,5 +50,10 @@ class LoginController extends BaseController
         $request->session()->invalidate();
         
         return redirect('/login');
+    }
+
+    public function guard()
+    {
+        return Auth::guard('admin');
     }
 }

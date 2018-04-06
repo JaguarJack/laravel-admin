@@ -8,12 +8,14 @@ return [
                 'provider' => 'admin_users',
             ],
         ],
-        
-        'admin_users'  => [
-            'driver' => 'eloquent',
-            'model' => Lizyu\Admin\Model\User::class,
-        ],
+        'providers' => [
+                'admin_users'  => [
+                    'driver' => 'eloquent',
+                    'model' => Lizyu\Admin\Model\User::class,
+                ],
+            ],
     ],
+
     
     'table' => 'admin_users',
     

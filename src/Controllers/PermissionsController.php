@@ -90,11 +90,12 @@ class PermissionsController extends BaseController
      * @date:2018年1月21日
      */
     public function getPermissions(
-        Request $request, 
         RoleContract $role, 
         PermissionContract $permission, 
         MenuService $menu
     ){
+        $request = app('request');
+
         $permissions = $permission->select('id', 'pid', 'name')->get();
         $roleOfPermissions = $role->getPermissionsOfRole($request->input('role_id'));
         
