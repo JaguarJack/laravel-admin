@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 
 class LizAdminServiceProvider extends ServiceProvider
 {
+    protected $defer = true;
+    
     /**
      * Bootstrap the application services.
      *
