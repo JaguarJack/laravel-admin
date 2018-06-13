@@ -7,7 +7,7 @@
 	],
 	"autoload" : {
 		"psr-4" : {
-			"Lizyu\\Admin\\" : ""
+			"Lizyu\\Admin\\" : "src/"
 		}
 	},
 	"description" : "Admin manage of laravel",
