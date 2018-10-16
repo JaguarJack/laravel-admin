@@ -63,7 +63,7 @@ class LizAdminServiceProvider extends ServiceProvider
      */
     public function mergeAuth()
     {
-        $this->app->make('config')->set('auth', array_merge_recursive(config('admin.auth', []), config('auth')));
+        $this->app->make('config')->set('auth', array_merge(config('admin.auth', []), config('auth')));
     }
     
     /**
